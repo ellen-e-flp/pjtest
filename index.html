@@ -3,41 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Pizza Tapper</title>
+  <title>Falling Leaves Catch</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     :root {
-      --green-dark: #2d5a27;
-      --green-mid: #3a7a32;
-      --green-light: #4caf50;
-      --cream: #f5f0e8;
-      --red: #e53935;
-      --yellow: #ffd54f;
-      --brown: #795548;
-      --table-color: #8B6914;
-      --table-light: #c49a2a;
+      --dusk-top:   #2e1a3d;
+      --dusk-bot:   #6b3a1f;
+      --sunset:     #e8752c;
+      --cream:      #f7ede0;
+      --leaf-red:   #d9491f;
+      --leaf-gold:  #e8a33d;
+      --pj-red:     #c62828;
+      --rot-green:  #57633a;
+      --card:       rgba(0,0,0,0.28);
+      --card-light: rgba(255,255,255,0.1);
+    }
+
+    html, body {
+      background: #150c1c;
+      overflow: hidden;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     body {
-      background: var(--green-dark);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      font-family: 'Georgia', serif;
-      overflow: hidden;
-      touch-action: none;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     #app {
       width: 100%;
-      max-width: 420px;
+      max-width: 430px;
       height: 100dvh;
-      max-height: 900px;
+      max-height: 930px;
       position: relative;
       overflow: hidden;
-      background: linear-gradient(180deg, #2d5a27 0%, #3a7a32 100%);
+      background: linear-gradient(180deg, var(--dusk-top) 0%, var(--dusk-bot) 100%);
+      user-select: none;
     }
 
     /* ===== SCREENS ===== */
@@ -50,74 +56,96 @@
       justify-content: flex-start;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.35s ease;
     }
     .screen.active {
       opacity: 1;
       pointer-events: all;
     }
 
-    /* ===== INSTRUCTION SCREEN ===== */
+    /* ===== INTRO ===== */
     #screen-intro {
-      background: linear-gradient(180deg, #2d5a27 0%, #3a7a32 100%);
       justify-content: space-between;
-      padding: 0 0 40px 0;
+      padding: 0 0 44px 0;
+      text-align: center;
     }
-
     .intro-top {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding-top: 60px;
-      flex: 1;
+      padding: 56px 28px 0;
     }
-
     .game-title {
-      font-size: clamp(28px, 8vw, 38px);
-      font-weight: 900;
+      font-size: clamp(26px, 8vw, 36px);
+      font-weight: 800;
       color: var(--cream);
-      text-align: center;
       text-transform: uppercase;
-      line-height: 1.1;
-      letter-spacing: 1px;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
-      margin-bottom: 16px;
+      line-height: 1.15;
+      letter-spacing: 0.5px;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+      margin-bottom: 14px;
     }
-
     .intro-desc {
-      color: rgba(255,255,255,0.8);
-      text-align: center;
-      font-size: 14px;
+      color: rgba(247,237,224,0.85);
+      font-size: 14.5px;
       line-height: 1.6;
-      max-width: 280px;
-      margin-bottom: 40px;
+      max-width: 300px;
+      margin-bottom: 26px;
     }
-
-    .intro-chef {
-      width: 180px;
-      margin-top: auto;
+    .legend {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-bottom: 8px;
     }
+    .legend-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--cream);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .legend-swatch { width: 40px; height: 40px; }
+    .legend-item.bad .legend-label { color: #ffab91; }
 
-    .btn-play {
+    .intro-bottom {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .btn-primary {
       background: var(--cream);
-      color: var(--green-dark);
+      color: var(--dusk-top);
       border: none;
       border-radius: 30px;
-      padding: 16px 60px;
-      font-size: 18px;
-      font-weight: 700;
+      padding: 16px 58px;
+      font-size: 17px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.35);
       transition: transform 0.1s, box-shadow 0.1s;
     }
-    .btn-play:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+    .btn-primary:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
+
+    .btn-text {
+      background: none;
+      border: none;
+      color: rgba(247,237,224,0.75);
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 6px;
+    }
 
     /* ===== GAME SCREEN ===== */
     #screen-game {
-      background: linear-gradient(180deg, #2d5a27 0%, #3a7a32 100%);
       flex-direction: column;
       align-items: center;
     }
@@ -127,94 +155,204 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 20px 8px;
-      color: var(--cream);
+      padding: 16px 18px 10px;
+      gap: 12px;
+      z-index: 2;
     }
 
-    #level-badge {
+    #timer-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    #timer-bar-track {
+      width: 100%;
+      height: 6px;
+      border-radius: 4px;
       background: rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 14px;
+      overflow: hidden;
+    }
+    #timer-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: var(--leaf-gold);
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    #timer-num {
+      color: var(--cream);
+      font-size: 12px;
       font-weight: 700;
+      opacity: 0.85;
     }
 
     #score-badge {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.14);
       border-radius: 20px;
-      padding: 6px 16px;
-      font-size: 14px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--cream);
+      white-space: nowrap;
     }
+    #score-badge .target { opacity: 0.65; font-weight: 600; }
 
     #canvas-wrap {
       flex: 1;
       width: 100%;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      touch-action: none;
     }
 
     #gameCanvas {
       display: block;
       width: 100%;
       height: 100%;
+      touch-action: none;
     }
 
-    #touch-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-    }
-    .touch-zone {
-      flex: 1;
-      cursor: pointer;
-    }
-
-    /* ===== GAME OVER SCREEN ===== */
-    #screen-gameover {
-      background: linear-gradient(180deg, #2d5a27 0%, #3a7a32 100%);
+    /* ===== END SCREENS ===== */
+    #screen-success, #screen-fail {
       justify-content: center;
       align-items: center;
-      gap: 24px;
+      gap: 22px;
       padding: 40px 30px;
+      text-align: center;
     }
 
-    .gameover-title {
-      font-size: clamp(32px, 10vw, 42px);
-      font-weight: 900;
+    #screen-success {
+      background: linear-gradient(180deg, #3d2450 0%, #8a4a1f 100%);
+    }
+
+    .end-title {
+      font-size: clamp(28px, 9vw, 38px);
+      font-weight: 800;
       color: var(--cream);
       text-transform: uppercase;
-      text-align: center;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
+    }
+    .end-sub {
+      color: rgba(247,237,224,0.85);
+      font-size: 14px;
+      max-width: 280px;
+      line-height: 1.5;
     }
 
-    .gameover-score-box {
-      background: rgba(255,255,255,0.1);
+    .reward-card {
+      width: 100%;
+      max-width: 300px;
+      background: var(--cream);
+      border-radius: 18px;
+      padding: 22px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+    }
+    .reward-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--pj-red);
+    }
+    .reward-code {
+      font-family: 'Courier New', monospace;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      color: #2b2b2b;
+      border: 2px dashed #cfc3b2;
+      border-radius: 10px;
+      padding: 10px 20px;
+      background: #fffdf9;
+    }
+    .reward-actions {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .btn-reward {
+      flex: 1;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 10px;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .btn-reward.primary { background: var(--pj-red); color: #fff; }
+    .btn-reward.secondary { background: #efe6d8; color: #2b2b2b; }
+
+    .toast {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(0,0,0,0.85);
+      color: var(--cream);
+      padding: 10px 20px;
       border-radius: 20px;
-      padding: 20px 50px;
-      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    #screen-fail {
+      background: linear-gradient(180deg, var(--dusk-top) 0%, var(--dusk-bot) 100%);
+    }
+    .fail-score-box {
+      background: var(--card-light);
+      border-radius: 20px;
+      padding: 20px 40px;
       color: var(--cream);
     }
-    .gameover-score-box .label { font-size: 14px; opacity: 0.7; }
-    .gameover-score-box .value { font-size: 52px; font-weight: 900; }
-
-    .gameover-high-box {
-      background: rgba(255,255,255,0.07);
-      border-radius: 20px;
-      padding: 14px 40px;
-      text-align: center;
-      color: var(--cream);
+    .fail-score-box .value {
+      font-size: 44px;
+      font-weight: 800;
     }
-    .gameover-high-box .label { font-size: 12px; opacity: 0.6; }
-    .gameover-high-box .value { font-size: 28px; font-weight: 700; }
+    .fail-score-box .value .of {
+      font-size: 22px;
+      opacity: 0.6;
+      font-weight: 700;
+    }
+    .fail-score-box .label {
+      font-size: 12px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
 
-    .gameover-chef {
-      width: 120px;
+    /* ===== ORIENTATION LOCK OVERLAY ===== */
+    #orientation-lock {
+      position: fixed;
+      inset: 0;
+      background: #150c1c;
+      color: var(--cream);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 999;
+      text-align: center;
+      padding: 30px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    #orientation-lock svg { width: 60px; height: 60px; opacity: 0.8; }
+    #orientation-lock p { font-size: 15px; max-width: 260px; line-height: 1.5; }
+
+    @media (orientation: landscape) and (max-height: 500px) {
+      #orientation-lock { display: flex; }
     }
   </style>
 </head>
@@ -224,45 +362,81 @@
   <!-- INTRO SCREEN -->
   <div id="screen-intro" class="screen active">
     <div class="intro-top">
-      <div class="game-title">Rollin' Rollin'<br>Keep On Rollin'</div>
-      <p class="intro-desc">Tap left or right to move your chef and catch every ingredient rolling down the table. Don't miss or it's game over!</p>
-      <canvas id="introChefCanvas" width="180" height="220" class="intro-chef"></canvas>
+      <div class="game-title">Falling Leaves Catch</div>
+      <p class="intro-desc">Slide your finger to move the pizza box and catch what's falling. Score enough before time's up to unlock your reward.</p>
+      <div class="legend">
+        <div class="legend-item">
+          <canvas class="legend-swatch" data-icon="leaf" width="40" height="40"></canvas>
+          <span class="legend-label">+1</span>
+        </div>
+        <div class="legend-item">
+          <canvas class="legend-swatch" data-icon="acorn" width="40" height="40"></canvas>
+          <span class="legend-label">+1</span>
+        </div>
+        <div class="legend-item bad">
+          <canvas class="legend-swatch" data-icon="pumpkin" width="40" height="40"></canvas>
+          <span class="legend-label">-2</span>
+        </div>
+      </div>
     </div>
-    <button class="btn-play" id="btn-start">Play Game</button>
+    <div class="intro-bottom">
+      <button class="btn-primary" id="btn-start">Play Game</button>
+    </div>
   </div>
 
   <!-- GAME SCREEN -->
   <div id="screen-game" class="screen">
     <div id="hud">
-      <div id="level-badge">Level <span id="level-num">1</span></div>
-      <div id="score-badge">🍕 <span id="score-num">0</span> / <span id="target-num">10</span></div>
+      <div id="timer-wrap">
+        <div id="timer-bar-track"><div id="timer-bar-fill"></div></div>
+        <div id="timer-num">20s</div>
+      </div>
+      <div id="score-badge"><span id="score-num">0</span> <span class="target">/ <span id="target-num">15</span></span></div>
     </div>
     <div id="canvas-wrap">
       <canvas id="gameCanvas"></canvas>
-      <div id="touch-overlay">
-        <div class="touch-zone" id="zone-left"></div>
-        <div class="touch-zone" id="zone-right"></div>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div id="screen-success" class="screen">
+    <div class="end-title">Nice Catch!</div>
+    <p class="end-sub">You hit the target and unlocked a reward.</p>
+    <div class="reward-card">
+      <div class="reward-eyebrow">Papa Johns Reward</div>
+      <div class="reward-code" id="reward-code">FALL10</div>
+      <div class="reward-actions">
+        <button class="btn-reward secondary" id="btn-copy-code">Copy Code</button>
+        <button class="btn-reward primary" id="btn-wallet">Add to Wallet</button>
       </div>
     </div>
+    <button class="btn-text" id="btn-success-done">Done</button>
   </div>
 
-  <!-- GAME OVER SCREEN -->
-  <div id="screen-gameover" class="screen">
-    <div class="gameover-title">Game Over!</div>
-    <canvas id="gameoverChefCanvas" width="120" height="150" class="gameover-chef"></canvas>
-    <div class="gameover-score-box">
+  <!-- FAIL SCREEN -->
+  <div id="screen-fail" class="screen">
+    <div class="end-title">So Close!</div>
+    <div class="fail-score-box">
+      <div class="value"><span id="fail-score">0</span><span class="of">&nbsp;/ 15</span></div>
       <div class="label">Your Score</div>
-      <div class="value" id="final-score">0</div>
     </div>
-    <div class="gameover-high-box">
-      <div class="label">Best</div>
-      <div class="value" id="high-score">0</div>
-    </div>
-    <button class="btn-play" id="btn-restart">Play Again</button>
+    <p class="end-sub">Catch leaves and acorns, dodge the rotten pumpkins, and you'll get there.</p>
+    <button class="btn-primary" id="btn-retry">Play Again</button>
   </div>
 
+  <div class="toast" id="toast"></div>
+
+</div>
+
+<div id="orientation-lock">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="7" y="2" width="10" height="20" rx="2" />
+    <line x1="11" y1="18" x2="13" y2="18" />
+  </svg>
+  <p>Please rotate your device back to portrait to keep playing.</p>
 </div>
 
 <script src="game.js"></script>
 </body>
 </html>
+</content>
